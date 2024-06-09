@@ -1,33 +1,37 @@
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 public class subArraySum {
-    void maxSubArray(int[] arr, int target){
-        int currsum =0;
-        int start =0;
-        int end =-1;
-        HashMap<Integer,Integer> map = new HashMap<>();
-         for (int i =0;i<arr.length;i++){
-             currsum += arr[i];
-             if(currsum-target == 0){
-                 start =0;
-                 end = i;
-                 break;
-             }
-             else if(map.containsKey(currsum-target)){
-                 start = map.get(currsum-target)+1;
-                 end = i;
-             }
+    public static List<List<Integer>> findSubarraysWithSum(int[] arr, int targetSum) {
+        List<List<Integer>> result = new ArrayList<>();
+        int currentSum = 0;
+        int start = 0;
 
-                 map.put(currsum,i);
+        for (int end = 0; end < arr.length; end++) {
+            currentSum += arr[end];
+
+            while (currentSum > targetSum && start<=end) {
+                currentSum -= arr[start];
+                start++;
+            }
 
 
+            if (currentSum == targetSum) {
+                List<Integer> subarray = new ArrayList<>();
+                for (int i = start; i <= end; i++) {
+                    subarray.add(arr[i]);
+                }
+                result.add(subarray);
+            }
+        }
 
-         }
-         if(end!=-1){
-             System.out.println(start+","+end);
-         }
-         else{
-             System.out.println("not found");
-         }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {3, 4, -7, 1, 3, 3, 1, -4};
+        int targetSum = 7;
+        List<List<Integer>> subarrays = findSubarraysWithSum(arr, targetSum);
+        System.out.println(subarrays);
     }
 }
